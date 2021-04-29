@@ -338,6 +338,45 @@ class ImpfterminService():
 
         its.termin_buchen()
 
+def generate_kontaktdaten(filepath):
+    print(
+        "Bitte trage zunächst deinen Impfcode und deine Kontaktdaten ein.\n"
+        f"Die Daten werden anschließend lokal in der Datei {filepath} abgelegt.\n"
+        "Du musst sie zukünftig nicht mehr eintragen.\n")
+    code = input("Code: ")
+    plz = input("PLZ des Impfzentrums: ")
+
+    anrede = input("Anrede (Frau/Herr/...): ")
+    vorname = input("Vorname: ")
+    nachname = input("Nachname: ")
+    strasse = input("Strasse: ")
+    hausnummer = input("Hausnummer: ")
+    wohnort_plz = input("PLZ des Wohnorts: ")
+    wohnort = input("Wohnort: ")
+    telefonnummer = input("Telefonnummer: ")
+    mail = input("Mail: ")
+
+    kontakt = {
+        "anrede": anrede,
+        "vorname": vorname,
+        "nachname": nachname,
+        "strasse": strasse,
+        "hausnummer": hausnummer,
+        "plz": wohnort_plz,
+        "ort": wohnort,
+        "phone": "+49" + str(telefonnummer),
+        "notificationChannel": "email",
+        "notificationReceiver": mail,
+    }
+
+    kontaktdaten = {
+        "code": code,
+        "plz": plz,
+        "kontakt": kontakt
+    }
+
+    with open(filepath, 'w', encoding='utf-8') as f:
+        json.dump(kontaktdaten, f, ensure_ascii=False, indent=4)
 
 if __name__ == "__main__":
     print("vaccipy 1.0\n")
@@ -350,43 +389,8 @@ if __name__ == "__main__":
             kontaktdaten_erstellen = False
 
     if kontaktdaten_erstellen:
-        print("Bitte trage zunächst deinen Impfcode und deine Kontaktdaten ein.\n"
-              "Die Daten werden anschließend lokal in der Datei 'kontaktdaten.json' abgelegt.\n"
-              "Du musst sie zukünftig nicht mehr eintragen.\n")
-        code = input("Code: ")
-        plz = input("PLZ des Impfzentrums: ")
+        generate_kontaktdaten('kontaktdaten.json')
 
-        anrede = input("Anrede (Frau/Herr/...): ")
-        vorname = input("Vorname: ")
-        nachname = input("Nachname: ")
-        strasse = input("Strasse: ")
-        hausnummer = input("Hausnummer: ")
-        wohnort_plz = input("PLZ des Wohnorts: ")
-        wohnort = input("Wohnort: ")
-        telefonnummer = input("Telefonnummer: ")
-        mail = input("Mail: ")
-
-        kontakt = {
-            "anrede": anrede,
-            "vorname": vorname,
-            "nachname": nachname,
-            "strasse": strasse,
-            "hausnummer": hausnummer,
-            "plz": wohnort_plz,
-            "ort": wohnort,
-            "phone": "+49" + str(telefonnummer),
-            "notificationChannel": "email",
-            "notificationReceiver": mail,
-        }
-
-        kontaktdaten = {
-            "code": code,
-            "plz": plz,
-            "kontakt": kontakt
-        }
-
-        with open('kontaktdaten.json', 'w', encoding='utf-8') as f:
-            json.dump(kontaktdaten, f, ensure_ascii=False, indent=4)
 
     else:
         with open("kontaktdaten.json") as f:
