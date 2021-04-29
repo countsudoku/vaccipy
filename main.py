@@ -1,3 +1,4 @@
+import argparse
 import json
 import os
 import platform
@@ -383,6 +384,14 @@ def main():
     """ entry point """
     print("vaccipy 1.0\n")
 
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "-d", "--delay",
+        type=float,
+        default=30,
+        help="the delay between requests")
+    args = parser.parse_args()
+
     # Check, ob die Datei "kontaktdaten.json" existiert
     kontaktdaten_erstellen = True
     if os.path.isfile("kontaktdaten.json"):
@@ -402,7 +411,7 @@ def main():
         plz = kontaktdaten["plz"]
         kontakt = kontaktdaten["kontakt"]
         print(f"Kontaktdaten wurden geladen für: {kontakt['vorname']} {kontakt['nachname']}\n")
-        ImpfterminService.run(code=code, plz=plz, kontakt=kontakt, check_delay=30)
+        ImpfterminService.run(code=code, plz=plz, kontakt=kontakt, check_delay=args.delay)
         return 0
 
     except KeyError:
