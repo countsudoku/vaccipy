@@ -25,7 +25,8 @@ class ImpfterminService():
 
         self.plz = str(plz)
         self.kontakt = kontakt
-        self.authorization = b64encode(bytes(f":{code}", encoding='utf-8')).decode("utf-8")
+        self.authorization = b64encode(
+            bytes(f":{code}", encoding='utf-8')).decode("utf-8")
 
         # Logging einstellen
         self.log = CLogger("impfterminservice")
@@ -35,7 +36,9 @@ class ImpfterminService():
         self.session = requests.Session()
         self.session.headers.update({
             'Authorization': f'Basic {self.authorization}',
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_2_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36',
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_2_3)'
+                          'AppleWebKit/537.36 (KHTML, like Gecko) '
+                          'Chrome/89.0.4389.82 Safari/537.36',
         })
 
         # Ausgewähltes Impfzentrum prüfen
@@ -108,7 +111,10 @@ class ImpfterminService():
                 alter = impfstoff.get("age")
                 intervall = impfstoff.get("interval")
                 self.verfuegbare_impfstoffe[qualifikation] = name
-                self.log.info(f"{qualifikation}: {name} --> Altersgruppe: {alter} --> Intervall: {intervall} Tage")
+                self.log.info(
+                    f"{qualifikation}: {name}"
+                    f" --> Altersgruppe: {alter}"
+                    f" --> Intervall: {intervall} Tage")
             print(" ")
             return True
 
@@ -301,7 +307,10 @@ class ImpfterminService():
         # Daten für Impftermin sammeln
         data = {
             "plz": self.plz,
-            "slots": [self.terminpaar[0].get("slotId"), self.terminpaar[1].get("slotId")],
+            "slots": [
+                self.terminpaar[0].get("slotId"),
+                self.terminpaar[1].get("slotId")
+            ],
             "qualifikationen": self.qualifikationen,
             "contact": self.kontakt
         }
