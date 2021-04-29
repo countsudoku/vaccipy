@@ -30,8 +30,8 @@ class ImpfterminService():
         self.log.set_prefix(f"*{self.code[-4:]}")
 
         # Session erstellen
-        self.s = requests.Session()
-        self.s.headers.update({
+        self.session = requests.Session()
+        self.session.headers.update({
             'Authorization': f'Basic {self.authorization}',
             'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_2_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36',
         })
@@ -61,7 +61,7 @@ class ImpfterminService():
         """
         url = "https://www.impfterminservice.de/assets/static/impfzentren.json"
 
-        res = self.s.get(url, timeout=15)
+        res = self.session.get(url, timeout=15)
         if res.ok:
             # Antwort-JSON umformattieren für einfachere Handhabung
             formattierte_impfzentren = {}
@@ -96,7 +96,7 @@ class ImpfterminService():
 
         path = "assets/static/its/vaccination-list.json"
 
-        res = self.s.get(self.domain + path, timeout=15)
+        res = self.session.get(self.domain + path, timeout=15)
         if res.ok:
             res_json = res.json()
             self.log.info(f"{len(res_json)} Impfstoffe am Impfzentrum verfügbar")
@@ -208,8 +208,8 @@ class ImpfterminService():
             try:
                 cookie = driver.get_cookie("bm_sz")
                 if cookie:
-                    self.s.cookies.clear()
-                    self.s.cookies.update({c['name']: c['value'] for c in driver.get_cookies()})
+                    self.session.cookies.clear()
+                    self.session.cookies.update({c['name']: c['value'] for c in driver.get_cookies()})
                     self.log.info("Browser-Cookie generiert: *{}".format(cookie.get("value")[-6:]))
                     return True
                 else:
@@ -228,7 +228,7 @@ class ImpfterminService():
 
         path = f"rest/login?plz={self.plz}"
 
-        res = self.s.get(self.domain + path, timeout=15)
+        res = self.session.get(self.domain + path, timeout=15)
         if res.ok:
             # Checken, welche Impfstoffe für das Alter zur Verfügung stehen
             self.qualifikationen = res.json().get("qualifikationen")
@@ -271,7 +271,7 @@ class ImpfterminService():
 
         path = f"rest/suche/impfterminsuche?plz={self.plz}"
 
-        res = self.s.get(self.domain + path, timeout=15)
+        res = self.session.get(self.domain + path, timeout=15)
         if res.ok:
             res_json = res.json()
             terminpaare = res_json.get("termine")
@@ -308,7 +308,7 @@ class ImpfterminService():
             "contact": self.kontakt
         }
 
-        res = self.s.post(self.domain + path, json=data, timeout=15)
+        res = self.session.post(self.domain + path, json=data, timeout=15)
         if res.status_code == 201:
             self.log.success("Termin erfolgreich gebucht!")
             return True
