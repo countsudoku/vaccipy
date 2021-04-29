@@ -81,8 +81,7 @@ class ImpfterminService():
                     self.impfzentrum.get("PLZ"),
                     self.impfzentrum.get("Ort")))
                 return True
-            else:
-                self.log.error(f"Kein Impfzentrum in PLZ {self.plz} verfügbar")
+            self.log.error(f"Kein Impfzentrum in PLZ {self.plz} verfügbar")
         else:
             self.log.error("Impfzentren können nicht geladen werden")
         return False
@@ -212,9 +211,8 @@ class ImpfterminService():
                     self.session.cookies.update({c['name']: c['value'] for c in driver.get_cookies()})
                     self.log.info("Browser-Cookie generiert: *{}".format(cookie.get("value")[-6:]))
                     return True
-                else:
-                    self.log.error("Cookies können nicht erstellt werden!")
-                    return False
+                self.log.error("Cookies können nicht erstellt werden!")
+                return False
             except:
                 return False
 
@@ -241,8 +239,7 @@ class ImpfterminService():
                 print(" ")
 
                 return True
-            else:
-                self.log.error("Keine qualifizierten Impfstoffe verfügbar!")
+            self.log.error("Keine qualifizierten Impfstoffe verfügbar!")
         else:
             self.log.error("Einloggen mit Code nicht möglich!")
         return False
@@ -284,8 +281,7 @@ class ImpfterminService():
                     ts = datetime.fromtimestamp(termin["begin"] / 1000).strftime('%d.%m.%Y um %H:%M Uhr')
                     self.log.success(f"{num}. Termin: {ts}")
                 return True, 200
-            else:
-                self.log.info("Keine Termine verfügbar")
+            self.log.info("Keine Termine verfügbar")
         else:
             self.log.error("Terminpaare können nicht geladen werden")
         return False, res.status_code
@@ -312,9 +308,8 @@ class ImpfterminService():
         if res.status_code == 201:
             self.log.success("Termin erfolgreich gebucht!")
             return True
-        else:
-            self.log.error("Termin konnte nicht gebucht werden")
-            return False
+        self.log.error("Termin konnte nicht gebucht werden")
+        return False
 
     @staticmethod
     def run(code: str, plz: str, kontakt: json, check_delay: int = 60):
