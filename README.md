@@ -29,9 +29,18 @@ python3 main.py
 ## Wie funktioniert vaccipy?
 
 
-Zunächst trägst du deinen "Impf-Code" (*Beispiel: A1B2-C3D4-E5F6*), die PLZ deines Impfzentrums 
-und deine Daten (Anschrift, Telefon, Mail) ein, die bei der Terminbuchung angegeben werden sollen.
-Du wirst zur Eingabe aufgefordert und deine Daten werden in der Datei `./kontaktdaten.json` gespeichert.
+Zunächst musst du eine `./kontaktdaten.json` erzeugen. Dazu rufst du `vaccipy` folgendermaßen auf:
+```shell
+python3 main.py --generate
+```
+
+`vaccipy` wir dich dann auffordern deinen "Impf-Code" (*Beispiel:
+A1B2-C3D4-E5F6*), die PLZ deines Impfzentrums und deine Daten (Anschrift,
+Telefon, Mail) ein, die bei der Terminbuchung angegeben werden sollen,
+einzugeben.  Du wirst zur Eingabe aufgefordert und deine Daten werden in der
+Datei `./kontaktdaten.json` gespeichert (der Name der Datei kann mi der
+commandline option `--config` auch geändert werden, falls du Termine für
+mehrere Personen ausmachen musst).
 
 *Hinweis: Es kann sein, dass für mehrere Impfzentren unterschiedliche Codes benötigt werden.*
 
