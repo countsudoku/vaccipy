@@ -390,19 +390,21 @@ def main():
         type=float,
         default=30,
         help="the delay between requests")
+    parser.add_argument(
+        "-g", "--generate",
+        default=False,
+        action="store_true",
+        help="generate a file with the kontaktdaten")
     args = parser.parse_args()
 
-    # Check, ob die Datei "kontaktdaten.json" existiert
-    kontaktdaten_erstellen = True
-    if os.path.isfile("kontaktdaten.json"):
-        daten_laden = input("Sollen die vorhandene Daten aus 'kontaktdaten.json' geladen werden (y/n)?: ").lower()
-        if daten_laden != "n":
-            kontaktdaten_erstellen = False
-
-    if kontaktdaten_erstellen:
+    if args.generate:
         generate_kontaktdaten('kontaktdaten.json')
         return 0
 
+    if not os.path.isfile('kontaktdaten.json'):
+        print(
+            f"Datei 'kontaktdaten.json' ist nicht vorhanden bitte nutzen sie "
+            "die --generate option, um die Konfiguration zu erzeugen")
     with open("kontaktdaten.json") as f:
         kontaktdaten = json.load(f)
 
@@ -417,7 +419,8 @@ def main():
     except KeyError:
         print("Kontaktdaten konnten nicht aus 'kontaktdaten.json' geladen werden.\n"
               "Bitte überprüfe, ob sie im korrekten JSON-Format sind oder gebe "
-              "deine Daten beim Programmstart erneut ein.")
+              "deine Daten mit Hilfe der Option '--generate' beim Programmstart "
+              "erneut ein.")
     return 1
 
 if __name__ == "__main__":
