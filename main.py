@@ -4,6 +4,7 @@ import platform
 import time
 from base64 import b64encode
 from datetime import datetime
+import sys
 
 import requests
 from selenium.webdriver import ActionChains
@@ -378,7 +379,8 @@ def generate_kontaktdaten(filepath):
     with open(filepath, 'w', encoding='utf-8') as f:
         json.dump(kontaktdaten, f, ensure_ascii=False, indent=4)
 
-if __name__ == "__main__":
+def main():
+    """ entry point """
     print("vaccipy 1.0\n")
 
     # Check, ob die Datei "kontaktdaten.json" existiert
@@ -390,11 +392,10 @@ if __name__ == "__main__":
 
     if kontaktdaten_erstellen:
         generate_kontaktdaten('kontaktdaten.json')
+        return 0
 
-
-    else:
-        with open("kontaktdaten.json") as f:
-            kontaktdaten = json.load(f)
+    with open("kontaktdaten.json") as f:
+        kontaktdaten = json.load(f)
 
     try:
         code = kontaktdaten["code"]
@@ -402,7 +403,13 @@ if __name__ == "__main__":
         kontakt = kontaktdaten["kontakt"]
         print(f"Kontaktdaten wurden geladen für: {kontakt['vorname']} {kontakt['nachname']}\n")
         ImpfterminService.run(code=code, plz=plz, kontakt=kontakt, check_delay=30)
+        return 0
+
     except KeyError:
         print("Kontaktdaten konnten nicht aus 'kontaktdaten.json' geladen werden.\n"
               "Bitte überprüfe, ob sie im korrekten JSON-Format sind oder gebe "
               "deine Daten beim Programmstart erneut ein.")
+    return 1
+
+if __name__ == "__main__":
+    sys.exit(main())
