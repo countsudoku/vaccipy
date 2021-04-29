@@ -407,7 +407,7 @@ def main():
         return 0
 
     if not os.path.isfile(args.config):
-        print(
+        parser.error(
             f"Datei {args.config} ist nicht vorhanden bitte nutzen sie "
             "die --generate option, um die Konfiguration zu erzeugen")
     with open(args.config) as f:
@@ -422,7 +422,7 @@ def main():
         return 0
 
     except KeyError:
-        print(
+        parser.error(
             f"Kontaktdaten konnten nicht aus {args.config} geladen werden.\n"
             "Bitte überprüfe, ob sie im korrekten JSON-Format sind oder gebe "
             "deine Daten mit Hilfe der Option '--generate' beim Programmstart "
