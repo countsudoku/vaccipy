@@ -65,7 +65,7 @@ class ImpfterminService():
         if res.ok:
             # Antwort-JSON umformattieren für einfachere Handhabung
             formattierte_impfzentren = {}
-            for bundesland, impfzentren in res.json().items():
+            for _, impfzentren in res.json().items():
                 for impfzentrum in impfzentren:
                     formattierte_impfzentren[impfzentrum["PLZ"]] = impfzentrum
 
